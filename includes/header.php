@@ -1,4 +1,12 @@
 <?php
+// Allow iframe embedding (Replit preview)
+header('X-Frame-Options: ALLOWALL');
+header('Content-Security-Policy: frame-ancestors *');
+
+// Session cookie settings for cross-site iframe compatibility
+ini_set('session.cookie_samesite', 'None');
+ini_set('session.cookie_secure', '0');
+
 // Memulai session untuk sistem login nanti
 session_start();
 
