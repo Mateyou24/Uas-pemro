@@ -42,43 +42,132 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Tambah Game - Admin</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <title>Add Game - Admin</title>
+
+    <link rel="stylesheet" href="../assets/style-admin.css">
 </head>
-<body style="background-color: #ecf0f1;">
-    <div class="container" style="max-width: 600px; margin-top: 40px;">
-        <div class="form-container" style="max-width: 100%;">
-            <h2>Tambah Board Game Baru</h2>
-            <br>
-            <form action="tambah-game.php" method="POST" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label>Nama Game</label>
-                    <input type="text" name="nama" required>
-                </div>
-                <div class="form-group">
-                    <label>Genre</label>
-                    <input type="text" name="genre" placeholder="Cth: Strategi, Party, Kartu" required>
-                </div>
-                <div class="form-group">
-                    <label>Jumlah Pemain</label>
-                    <input type="text" name="pemain" placeholder="Cth: 2-4 Players" required>
-                </div>
-                <div class="form-group">
-                    <label>Durasi Bermain</label>
-                    <input type="text" name="durasi" placeholder="Cth: 30-60 Min" required>
-                </div>
-                <div class="form-group">
-                    <label>Deskripsi & Cara Main Singkat</label>
-                    <textarea name="deskripsi" rows="5" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Upload Gambar Game</label>
-                    <input type="file" name="gambar" accept="image/png, image/jpeg, image/jpg">
-                </div>
-                <button type="submit" class="btn" style="background-color: #27ae60;">Simpan Game</button>
-                <a href="games.php" style="display: block; text-align: center; margin-top: 15px; color: #7f8c8d;">Batal</a>
-            </form>
-        </div>
+<body>
+
+<nav class="admin-navbar">
+
+    <div class="admin-logo">
+        🎲 Tavern Of Meeple
     </div>
+
+    <div class="admin-menu">
+        <a href="index.php">Dashboard</a>
+        <a href="games.php" class="active">Games</a>
+        <a href="reviews.php">Reviews</a>
+        <a href="../logout.php" class="logout">Logout</a>
+    </div>
+
+</nav>
+
+<div class="admin-container">
+
+    <div class="form-header">
+
+        <span class="dashboard-tag">
+            GAME MANAGEMENT
+        </span>
+
+        <h1>Add New Board Game</h1>
+
+        <p>
+            Tambahkan board game baru ke dalam koleksi website.
+        </p>
+
+    </div>
+
+    <div class="admin-form-card">
+
+        <form
+            action="tambah-game.php"
+            method="POST"
+            enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label>Nama Game</label>
+
+                <input
+                    type="text"
+                    name="nama"
+                    placeholder="Contoh: Catan"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label>Genre</label>
+
+                <input
+                    type="text"
+                    name="genre"
+                    placeholder="Strategi, Party, Card Game"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label>Jumlah Pemain</label>
+
+                <input
+                    type="text"
+                    name="pemain"
+                    placeholder="2 - 4 Players"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label>Durasi Bermain</label>
+
+                <input
+                    type="text"
+                    name="durasi"
+                    placeholder="30 - 60 Minutes"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label>Deskripsi</label>
+
+                <textarea
+                    name="deskripsi"
+                    rows="6"
+                    placeholder="Masukkan deskripsi singkat dan cara bermain..."
+                    required></textarea>
+            </div>
+
+            <div class="form-group">
+
+                <label>Upload Game Image</label>
+
+                <input
+                    type="file"
+                    name="gambar"
+                    accept="image/png, image/jpeg, image/jpg">
+
+                <small>
+                    Format yang disarankan: JPG atau PNG.
+                </small>
+
+            </div>
+
+            <div class="form-actions">
+
+                <button type="submit" class="save-btn">
+                    Save Game
+                </button>
+
+                <a href="games.php" class="cancel-btn">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
 </body>
 </html>

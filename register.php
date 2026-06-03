@@ -47,35 +47,107 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<div class="form-container">
-    <h2 style="text-align: center; margin-bottom: 20px;">Daftar Akun Baru</h2>
-    
-    <?php if ($error != ''): ?>
-        <div class="alert-error"><?= $error ?></div>
-    <?php endif; ?>
-    
-    <?php if ($success != ''): ?>
-        <div class="alert-error" style="background-color: #d4edda; color: #155724; border-color: #c3e6cb;"><?= $success ?></div>
-    <?php endif; ?>
+<div class="login-page">
 
-    <form action="register.php" method="POST">
-        <div class="form-group">
-            <label for="username">Username Baru</label>
-            <input type="text" name="username" id="username" required autocomplete="off" minlength="4" placeholder="Minimal 4 karakter">
+    <!-- FORM REGISTER (KIRI) -->
+    <div class="login-right">
+
+        <div class="login-card">
+
+            <div class="login-header">
+                <h2>Welcome</h2>
+                <p>Create your account to get started.</p>
+            </div>
+
+
+            <?php if ($error != ''): ?>
+                <div class="alert-error">
+                    <?= $error ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($success != ''): ?>
+                <div class="alert-success">
+                    <?= $success ?>
+                </div>
+            <?php endif; ?>
+
+            <form action="register.php" method="POST">
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        required
+                        autocomplete="off"
+                        minlength="4"
+                        placeholder="Minimum 4 characters">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        required
+                        minlength="6"
+                        placeholder="Minimum 6 characters">
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input
+                        type="password"
+                        name="confirm_password"
+                        id="confirm_password"
+                        required
+                        placeholder="Repeat your password">
+                </div>
+
+                <button type="submit" class="btn-login">
+                    Create Account
+                </button>
+
+                <div class="register-link">
+                    Sudah punya akun?
+                    <a href="login.php">Login di sini</a>
+                </div>
+
+            </form>
+
         </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" required minlength="6" placeholder="Minimal 6 karakter">
+
+    </div>
+
+    <!-- GAMBAR / BANNER (KANAN) -->
+    <div class="login-left">
+
+        <div class="overlay-content">
+
+            <div class="brand">
+                <h1>
+                    Tavern Of<br>
+                    Meeple
+                </h1>
+            </div>
+
+            <div class="welcome-text">
+                <h2>
+                    Bangun koleksi Anda dan terhubung dengan sesama ahli strategi.
+                </h2>
+
+                <p>
+                    Buat akun untuk melacak permainan papan favorit Anda, menemukan strategi baru, 
+                    dan menjadi bagian dari pecinta Board Game yang berkembang.
+                </p>
+            </div>
+
         </div>
-        <div class="form-group">
-            <label for="confirm_password">Konfirmasi Password</label>
-            <input type="password" name="confirm_password" id="confirm_password" required placeholder="Ulangi password Anda">
-        </div>
-        <button type="submit" class="btn" style="background-color: #34495e;">Daftar Sekarang</button>
-        <p style="text-align: center; margin-top: 15px; font-size: 14px;">
-            Sudah punya akun? <a href="login.php">Login</a>
-        </p>
-    </form>
+
+    </div>
+
 </div>
-
 <?php include 'includes/footer.php'; ?>

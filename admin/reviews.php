@@ -20,72 +20,128 @@ $result = $conn->query($sql);
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Kelola Ulasan - Admin</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <style>
-        body { background-color: #ecf0f1; }
-        .admin-nav { background-color: #2c3e50; padding: 15px 30px; display: flex; justify-content: space-between; }
-        .admin-nav .logo { color: #fff; font-weight: bold; font-size: 20px; }
-        .admin-links a { color: #ecf0f1; text-decoration: none; margin-left: 20px; }
-        .table-admin { width: 100%; border-collapse: collapse; margin-top: 20px; background: #fff; }
-        .table-admin th, .table-admin td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        .table-admin th { background-color: #e74c3c; color: white; }
-        .btn-hapus { background-color: #c0392b; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 14px;}
-        .stars { color: #f1c40f; font-weight: bold; }
-    </style>
+    <title>Manage Reviews - Admin</title>
+
+    <link rel="stylesheet" href="../assets/style-admin.css">
 </head>
 <body>
-    <nav class="admin-nav">
-        <div class="logo">Admin Panel - Ulasan</div>
-        <div class="admin-links">
-            <a href="index.php">Dashboard</a>
-            <a href="games.php">Kelola Game</a>
-            <a href="reviews.php">Kelola Ulasan</a>
-            <a href="../logout.php">Logout</a>
+
+<nav class="admin-navbar">
+
+    <div class="admin-logo">
+        🎲 Tavern Of Meeple
+    </div>
+
+    <div class="admin-menu">
+        <a href="index.php">Dashboard</a>
+        <a href="games.php">Games</a>
+        <a href="reviews.php" class="active">Reviews</a>
+        <a href="../logout.php" class="logout">Logout</a>
+    </div>
+
+</nav>
+
+<div class="admin-container">
+
+    <div class="page-header">
+
+        <div>
+
+            <span class="dashboard-tag">
+                REVIEW MANAGEMENT
+            </span>
+
+            <h1>User Reviews</h1>
+
+            <p>
+                Kelola seluruh ulasan dan rating yang diberikan pengguna.
+            </p>
+
         </div>
-    </nav>
 
-    <div class="container" style="max-width: 1100px;">
-        <h2>Kelola Ulasan Pengguna</h2>
-        <p style="color: #7f8c8d;">Berikut adalah daftar semua ulasan yang masuk dari pengunjung website.</p>
+    </div>
 
-        <table class="table-admin">
+    <div class="table-wrapper">
+
+        <table class="admin-table">
+
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Nama Game</th>
+                    <th>Game</th>
                     <th>Reviewer</th>
                     <th>Rating</th>
-                    <th>Komentar</th>
-                    <th>Tanggal</th>
-                    <th>Aksi</th>
+                    <th>Comment</th>
+                    <th>Date</th>
+                    <th>Action</th>
                 </tr>
             </thead>
+
             <tbody>
-                <?php 
+
+                <?php
                 $no = 1;
-                while($row = $result->fetch_assoc()): 
+                while($row = $result->fetch_assoc()):
                 ?>
+
                 <tr>
+
                     <td><?= $no++; ?></td>
-                    <td><strong><?= htmlspecialchars($row['nama_game']); ?></strong></td>
-                    <td><?= htmlspecialchars($row['nama_reviewer']); ?></td>
-                    <td class="stars"><?= str_repeat("⭐", $row['rating']); ?></td>
-                    <td><?= nl2br(htmlspecialchars($row['komentar'])); ?></td>
-                    <td><small><?= $row['created_at']; ?></small></td>
+
                     <td>
-                        <a href="hapus-review.php?id=<?= $row['id']; ?>" class="btn-hapus" onclick="return confirm('Yakin ingin menghapus ulasan ini?');">Hapus</a>
+                        <strong>
+                            <?= htmlspecialchars($row['nama_game']); ?>
+                        </strong>
+                    </td>
+
+                    <td>
+                        <?= htmlspecialchars($row['nama_reviewer']); ?>
+                    </td>
+
+                    <td class="rating-stars">
+                        <?= str_repeat("★", $row['rating']); ?>
+                    </td>
+
+                    <td class="review-comment">
+                        <?= nl2br(htmlspecialchars($row['komentar'])); ?>
+                    </td>
+
+                    <td>
+                        <?= date('d M Y', strtotime($row['created_at'])); ?>
+                    </td>
+
+                    <td>
+
+                        <a
+                            href="hapus-review.php?id=<?= $row['id']; ?>"
+                            class="btn-delete"
+                            onclick="return confirm('Yakin ingin menghapus ulasan ini?');">
+                            Delete
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                <?php endwhile; ?>
+
+                <?php if($result->num_rows == 0): ?>
+
+                <tr>
+                    <td colspan="7" class="empty-state">
+                        No reviews available.
                     </td>
                 </tr>
-                <?php endwhile; ?>
-                
-                <?php if($result->num_rows == 0): ?>
-                <tr>
-                    <td colspan="7" style="text-align: center;">Belum ada ulasan dari user.</td>
-                </tr>
+
                 <?php endif; ?>
+
             </tbody>
+
         </table>
+
     </div>
+
+</div>
+
 </body>
 </html>

@@ -1,34 +1,115 @@
-<?php 
+<?php
 include 'includes/db.php';
-include 'includes/header.php'; 
+include 'includes/header.php';
 
-// Ambil 3 game terbaru untuk di-featured
-$result = $conn->query("SELECT * FROM board_games ORDER BY id DESC LIMIT 3");
+$result = $conn->query("
+SELECT *
+FROM board_games
+ORDER BY id DESC
+LIMIT 10
+");
 ?>
 
-<div style="text-align: center; padding: 40px 20px; background: #2c3e50; color: white; border-radius: 8px; margin-bottom: 30px;">
-    <h1>Selamat Datang di Board Game Hub 🎲</h1>
-    <p style="margin-top: 10px; font-size: 18px;">Temukan, pelajari, dan beri ulasan board game favoritmu di sini!</p>
-</div>
+<!-- HERO -->
+<section class="hero">
 
-<h2>Board Game Terbaru</h2>
-<div class="game-grid">
-    <?php while($row = $result->fetch_assoc()): ?>
-        <div class="game-card">
-            <img src="assets/images/<?= htmlspecialchars($row['gambar']); ?>" alt="<?= htmlspecialchars($row['nama']); ?>">
-            <div class="game-card-body">
-                <h3><?= htmlspecialchars($row['nama']); ?></h3>
-                <div class="game-meta"><strong>Genre:</strong> <?= htmlspecialchars($row['genre']); ?></div>
-                <div class="game-meta"><strong>Pemain:</strong> <?= htmlspecialchars($row['pemain']); ?></div>
-                <div class="game-meta"><strong>Durasi:</strong> <?= htmlspecialchars($row['durasi']); ?></div>
-                <a href="detail.php?id=<?= $row['id']; ?>" class="btn-detail" style="margin-top: 15px;">Lihat Detail</a>
-            </div>
+    <div class="hero-content">
+
+        <span class="hero-tag">
+            PLATFORM KOMUNITAS MODERN
+        </span>
+
+        <h1>
+            Temukan Board Game
+            Favoritmu
+        </h1>
+
+        <p>
+            Platform komunitas board game modern untuk eksplorasi, review, dan strategi.
+            Temukan koleksi terbaik dan bergabung dengan ribuan pemain lainnya di seluruh
+            dunia.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="game.php" class="btn-primary">
+                Jelajahi Game
+            </a>
+
+            <?php if(!isset($_SESSION['user_id'])): ?>
+            <a href="login.php" class="btn-secondary">
+                Masuk
+            </a>
+            <?php endif; ?>
+
         </div>
-    <?php endwhile; ?>
 
-    <?php if($result->num_rows == 0): ?>
-        <p>Belum ada board game yang tersedia.</p>
-    <?php endif; ?>
-</div>
+    </div>
+
+</section>
+
+<!-- FEATURED GAMES -->
+<section class="featured-games">
+
+    <div class="section-header">
+
+        <h2>Permainan</h2>
+
+        <a href="game.php">
+            Board Game Lainnya →
+        </a>
+
+    </div>
+
+    <div class="games-slider">
+
+        <?php while($row = $result->fetch_assoc()): ?>
+
+        <div class="game-card">
+
+            <img
+                src="assets/images/<?= htmlspecialchars($row['gambar']); ?>"
+                alt="<?= htmlspecialchars($row['nama']); ?>"
+            >
+
+            <div class="game-card-body">
+
+                <span class="game-meta">
+                    <?= htmlspecialchars($row['genre']); ?>
+                </span>
+
+                <h3>
+                    <?= htmlspecialchars($row['nama']); ?>
+                </h3>
+
+                <a
+                    href="detail.php?id=<?= $row['id']; ?>"
+                    class="btn-detail"
+                >
+                    Lihat Detail
+                </a>
+
+            </div>
+
+        </div>
+
+        <?php endwhile; ?>
+
+    </div>
+
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories">
+
+    <h2>Jelajahi Berbagai Genre</h2>
+
+    <div class="category-list">
+
+        <a href="game.php">BoardGame</a>
+
+    </div>
+
+</section>
 
 <?php include 'includes/footer.php'; ?>

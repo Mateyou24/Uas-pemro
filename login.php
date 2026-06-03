@@ -26,9 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
-        
+
         // Verifikasi password biner/hash
         if (password_verify($password, $user['password'])) {
+
             // Simpan data login ke session
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
@@ -36,44 +37,103 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // PROSES TRANSISI HALAMAN (REDIRECT) YANG BENAR
             if ($_SESSION['role'] === 'admin') {
-                header("Location: admin/index.php"); // Admin ke Panel Admin
+                header("Location: admin/index.php");
             } else {
-                header("Location: dashboard.php"); // Member ke Home Publik (dashboard.php)
+                header("Location: dashboard.php");
             }
             exit;
+
         } else {
             $error = "Password salah!";
         }
+
     } else {
         $error = "Username tidak ditemukan!";
     }
 }
 ?>
 
-<div class="form-container" style="max-width: 400px; margin: 5px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-    <h2 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">Login Member / Admin</h2>
-    
-    <?php if ($error != ''): ?>
-        <div class="alert-error" style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 4px; margin-bottom: 15px; border: 1px solid #f5c6cb; text-align: center;">
-            <?= $error ?>
-        </div>
-    <?php endif; ?>
+<div class="login-page">
 
-    <form action="login.php" method="POST">
-        <div class="form-group" style="margin-bottom: 15px;">
-            <label for="username" style="display: block; margin-bottom: 5px; font-weight: bold;">Username</label>
-            <input type="text" name="username" id="username" required autocomplete="off" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
-        </div>
-        <div class="form-group" style="margin-bottom: 20px;">
-            <label for="password" style="display: block; margin-bottom: 5px; font-weight: bold;">Password</label>
-            <input type="password" name="password" id="password" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
-        </div>
-        <button type="submit" class="btn" style="width: 100%; padding: 10px; background-color: #2c3e50; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; font-weight: bold;">Masuk</button>
-        
-        <p style="text-align: center; margin-top: 15px; font-size: 14px;">
-            Belum punya akun? <a href="register.php" style="color: #3498db; text-decoration: none; font-weight: bold;">Daftar di sini</a>
+    <!-- KIRI -->
+    <div class="login-left">
+
+        <div class="overlay-content">
+
+    <div class="brand">
+        <h1>Tavern </h1>
+        <p>  Of Meeple<p>
+    </div>
+
+    <div class="welcome-text">
+        <h2>
+            Perpaduan sempurna antara kedalaman taktis dan koneksi digital yang mulus.
+        </h2>
+
+        <p>
+            Bergabunglah dengan komunitas eksklusif pemain. 
+            Kelola koleksimu, temukan taktik baru, dan atur malam permainanmu berikutnya.
         </p>
-    </form>
+    </div>
+
+</div>
+
+    </div>
+
+    <!-- KANAN -->
+    <div class="login-right">
+
+        <div class="login-card">
+
+            <div class="login-header">
+                <h2>Welcome Back</h2>
+                <p>Enter your details to access your dashboard.</p>
+            </div>
+
+            <?php if ($error != ''): ?>
+                <div class="alert-error">
+                    <?= $error ?>
+                </div>
+            <?php endif; ?>
+
+            <form action="login.php" method="POST">
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+
+                    <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        required
+                        autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        required>
+                </div>
+
+                <button type="submit" class="btn-login">
+                    Sign In
+                </button>
+
+                <div class="register-link">
+                    Belum punya akun?
+                    <a href="register.php">Daftar di sini</a>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
 </div>
 
 <?php include 'includes/footer.php'; ?>

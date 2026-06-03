@@ -66,44 +66,144 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Edit Game - Admin</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+
+    <link rel="stylesheet" href="../assets/style-admin.css">
 </head>
-<body style="background-color: #ecf0f1;">
-    <div class="container" style="max-width: 600px; margin-top: 40px;">
-        <div class="form-container" style="max-width: 100%;">
-            <h2>Edit Data Board Game</h2>
-            <br>
-            <form action="edit-game.php?id=<?= $id ?>" method="POST" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label>Nama Game</label>
-                    <input type="text" name="nama" value="<?= htmlspecialchars($game['nama']) ?>" required>
-                </div>
-                <div class="form-group">
-                    <label>Genre</label>
-                    <input type="text" name="genre" value="<?= htmlspecialchars($game['genre']) ?>" required>
-                </div>
-                <div class="form-group">
-                    <label>Jumlah Pemain</label>
-                    <input type="text" name="pemain" value="<?= htmlspecialchars($game['pemain']) ?>" required>
-                </div>
-                <div class="form-group">
-                    <label>Durasi Bermain</label>
-                    <input type="text" name="durasi" value="<?= htmlspecialchars($game['durasi']) ?>" required>
-                </div>
-                <div class="form-group">
-                    <label>Deskripsi & Cara Main Singkat</label>
-                    <textarea name="deskripsi" rows="5" required><?= htmlspecialchars($game['deskripsi']) ?></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Gambar Sekarang:</label><br>
-                    <img src="../assets/images/<?= $game['gambar'] ?>" width="100" style="margin-bottom: 10px; border-radius: 5px;"><br>
-                    <label>Ganti Gambar Baru *(Biarkan kosong jika tidak ingin mengubah)</label>
-                    <input type="file" name="gambar" accept="image/png, image/jpeg, image/jpg">
-                </div>
-                <button type="submit" class="btn" style="background-color: #f39c12;">Update Data</button>
-                <a href="games.php" style="display: block; text-align: center; margin-top: 15px; color: #7f8c8d;">Batal</a>
-            </form>
-        </div>
+<body>
+
+<nav class="admin-navbar">
+
+    <div class="admin-logo">
+        🎲 Tavern Of Meeple
     </div>
+
+    <div class="admin-menu">
+        <a href="index.php">Dashboard</a>
+        <a href="games.php" class="active">Games</a>
+        <a href="reviews.php">Reviews</a>
+        <a href="../logout.php" class="logout">Logout</a>
+    </div>
+
+</nav>
+
+<div class="admin-container">
+
+    <div class="form-header">
+
+        <span class="dashboard-tag">
+            GAME MANAGEMENT
+        </span>
+
+        <h1>Edit Board Game</h1>
+
+        <p>
+            Perbarui informasi board game yang tersedia.
+        </p>
+
+    </div>
+
+    <div class="admin-form-card">
+
+        <form
+            action="edit-game.php?id=<?= $id ?>"
+            method="POST"
+            enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label>Nama Game</label>
+
+                <input
+                    type="text"
+                    name="nama"
+                    value="<?= htmlspecialchars($game['nama']) ?>"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label>Genre</label>
+
+                <input
+                    type="text"
+                    name="genre"
+                    value="<?= htmlspecialchars($game['genre']) ?>"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label>Jumlah Pemain</label>
+
+                <input
+                    type="text"
+                    name="pemain"
+                    value="<?= htmlspecialchars($game['pemain']) ?>"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label>Durasi Bermain</label>
+
+                <input
+                    type="text"
+                    name="durasi"
+                    value="<?= htmlspecialchars($game['durasi']) ?>"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label>Deskripsi</label>
+
+                <textarea
+                    name="deskripsi"
+                    rows="6"
+                    required><?= htmlspecialchars($game['deskripsi']) ?></textarea>
+            </div>
+
+            <div class="form-group">
+
+                <label>Current Image</label>
+
+                <div class="image-preview">
+
+                    <img
+                        src="../assets/images/<?= htmlspecialchars($game['gambar']) ?>"
+                        alt="Game Image">
+
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Upload New Image</label>
+
+                <input
+                    type="file"
+                    name="gambar"
+                    accept="image/png, image/jpeg, image/jpg">
+
+                <small>
+                    Leave empty if you don't want to change the image.
+                </small>
+
+            </div>
+
+            <div class="form-actions">
+
+                <button type="submit" class="save-btn">
+                    Update Game
+                </button>
+
+                <a href="games.php" class="cancel-btn">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
 </body>
 </html>

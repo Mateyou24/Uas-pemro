@@ -1,26 +1,50 @@
-<?php 
-// Memanggil bagian atas website
-include 'includes/header.php'; 
-?>
+<?php include 'includes/header.php'; ?>
 
-<h2>Tentang Kelompok Kami</h2>
-<p style="margin-bottom: 20px;">Website ini dibuat untuk memenuhi Final Project. Berikut adalah anggota kelompok kami:</p>
+<section class="team-section">
 
-<div class="card-anggota">
-    <h3>1. Nama Anggota Pertama</h3>
-    <p><strong>NIM:</strong> 12345678</p>
-    <p><strong>Role:</strong> Project Manager & Backend Developer</p>
-    <p>Tugas: Membuat database MySQL, mengatur routing PHP, dan mengerjakan fitur CRUD dan Login.</p>
-</div>
+    <div class="team-header">
+        <h1>Our Team</h1>
 
-<div class="card-anggota">
-    <h3>2. Nama Anggota Kedua</h3>
-    <p><strong>NIM:</strong> 87654321</p>
-    <p><strong>Role:</strong> Frontend Developer</p>
-    <p>Tugas: Merancang antarmuka UI/UX menggunakan HTML & CSS native, serta membuat halaman statis.</p>
-</div>
+        <p>
+            Kami adalah tim pengembang di balik Tavern of Meeple.
+            Website ini dibuat sebagai proyek akhir Mata Kuliah Pemrograman Web. 
+            Bertujuan untuk menghadirkan pengalaman komunitas board game yang modern, interaktif, dan mudah digunakan.
+        </p>
+    </div>
 
-<?php 
-// Memanggil bagian bawah website
-include 'includes/footer.php'; 
-?>
+    <div class="team-grid">
+
+        <!-- Anggota 1 -->
+        <div class="member-card">
+            <img src="assets/profil2.jpeg" >
+
+            <h3>MATTHEW ELGI HENDRO ZABIAN JOCOM</h3>
+
+            <span>240211060047</span>
+        </div>
+
+        <!-- Anggota 2 -->
+        <div class="member-card">
+            <img src="assets/profil.jpeg" >
+
+            <h3>STEWARD CLIFORD MANDEY</h3>
+
+            <span>240211060057</span>
+        </div>
+
+        <!-- Anggota 3 -->
+        <div class="member-card">
+            <img src="assets/profil1.jpeg" >
+
+            <h3>ZEPHANIAH DANIEL ANIS</h3>
+
+            <span>240211060059</span>
+        </div>
+
+
+    </div>
+
+</section>
+
+<?php include 'includes/footer.php'; ?>
+<link rel="stylesheet" href="assets/style.css">

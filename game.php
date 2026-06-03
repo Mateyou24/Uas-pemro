@@ -18,14 +18,17 @@ if ($search != '') {
 }
 ?>
 
-<h2>Koleksi Board Game</h2>
-<p style="color: #7f8c8d; margin-bottom: 20px;">Cari dan temukan board game yang seru untuk dimainkan bersama teman.</p>
+<h2 class="page-title">Koleksi Board Game</h2>
 
-<form action="games.php" method="GET" class="search-form">
+<p class="page-subtitle">
+    Jelajahi koleksi board game terbaik untuk dimainkan bersama teman dan keluarga.
+</p>
+
+<form action="game.php" method="GET" class="search-form">
     <input type="text" name="search" placeholder="Masukkan nama board game yang dicari..." value="<?= htmlspecialchars($search) ?>">
     <button type="submit">Cari</button>
     <?php if($search != ''): ?>
-        <a href="games.php" style="padding: 10px; background:#bdc3c7; color:#333; text-decoration:none; border-radius:4px;">Reset</a>
+        <a href="game.php" style="padding: 10px; background:#bdc3c7; color:#333; text-decoration:none; border-radius:4px;">Reset</a>
     <?php endif; ?>
 </form>
 
