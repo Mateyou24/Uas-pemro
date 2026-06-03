@@ -1,7 +1,9 @@
 #!/bin/bash
 
-MARIADB_BIN=/nix/store/a4jsa8kjdn3wlccj2wkvhxqza38rpxzf-mariadb-server-10.11.13/bin/mariadbd
-MARIADB_SHARE=/nix/store/a4jsa8kjdn3wlccj2wkvhxqza38rpxzf-mariadb-server-10.11.13/share/mysql
+# Detect MariaDB binary and basedir dynamically
+MARIADB_BIN=$(which mariadbd)
+MARIADB_BASEDIR=$(dirname $(dirname $(realpath "$MARIADB_BIN")))
+MARIADB_SHARE="$MARIADB_BASEDIR/share/mysql"
 DATADIR=/home/runner/workspace/.mysql_data
 SOCKET=/tmp/mysql.sock
 
@@ -10,7 +12,7 @@ rm -f "$SOCKET"
 
 # Start MariaDB in background
 "$MARIADB_BIN" --no-defaults \
-    "--basedir=/nix/store/a4jsa8kjdn3wlccj2wkvhxqza38rpxzf-mariadb-server-10.11.13" \
+    "--basedir=$MARIADB_BASEDIR" \
     "--datadir=$DATADIR" \
     "--socket=$SOCKET" \
     --port=3306 \
@@ -46,12 +48,12 @@ fi
 if ! mysql -u root -S "$SOCKET" -e "USE boardgame_hub;" >/dev/null 2>&1; then
     echo "Importing boardgame_hub database..."
     mysql -u root -S "$SOCKET" -e "CREATE DATABASE IF NOT EXISTS boardgame_hub CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
-    mysql -u root -S "$SOCKET" boardgame_hub < /home/runner/workspace/boardgame_hub.sql
+    mysql -u root -S "$SOCKET" boardgame_hub < "$(dirname "$0")/boardgame_hub.sql"
     echo "Database imported."
 fi
 
 echo "Starting PHP server on port 5000..."
-php -S 0.0.0.0:5000 -t /home/runner/workspace &
+php -S 0.0.0.0:5000 -t "$(dirname "$0")" &
 PHP_PID=$!
 echo "PHP server started (PID: $PHP_PID)"
 
