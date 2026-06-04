@@ -1,19 +1,25 @@
-<?php 
+<?php
 include 'includes/db.php';
-include 'includes/header.php'; 
+
+if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_samesite', 'None');
+    ini_set('session.cookie_secure', '0');
+    session_start();
+}
 
 // 1. CEK ID GAME
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    
+
     $stmt = $conn->prepare("SELECT * FROM board_games WHERE id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $result = $stmt->get_result();
-    
+
     if ($result->num_rows > 0) {
         $game = $result->fetch_assoc();
     } else {
+        include 'includes/header.php';
         echo "<div style='text-align:center; padding:50px;'><h2>Game tidak ditemukan!</h2></div>";
         include 'includes/footer.php';
         exit;
@@ -26,7 +32,6 @@ if (isset($_GET['id'])) {
 // 2. PROSES REVIEW
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_review'])) {
 
-    // Wajib login
     if (!isset($_SESSION['user_id'])) {
         header("Location: login.php");
         exit;
@@ -42,20 +47,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_review'])) {
         VALUES (?, ?, ?, ?)
     ");
 
-    $stmt_rev->bind_param(
-        "isis",
-        $id,
-        $nama_reviewer,
-        $rating,
-        $komentar
-    );
-    
+    $stmt_rev->bind_param("isis", $id, $nama_reviewer, $rating, $komentar);
+
     if ($stmt_rev->execute()) {
         header("Location: detail.php?id=" . $id);
         exit;
     }
 }
-
 
 // 3. AMBIL REVIEW
 $reviews = $conn->query("
@@ -66,6 +64,7 @@ $reviews = $conn->query("
     ORDER BY r.id DESC
 ");
 
+include 'includes/header.php';
 ?>
 
 <!-- DETAIL GAME -->
@@ -142,10 +141,7 @@ $reviews = $conn->query("
 
     <h4>Tulis Ulasan Anda</h4>
 
-    <p style="
-        margin-bottom:15px;
-        color:#22c55e;
-    ">
+    <p style="margin-bottom:15px; color:#22c55e;">
         Mengulas sebagai:
         <strong><?= htmlspecialchars($_SESSION['username']) ?></strong>
     </p>
@@ -157,27 +153,11 @@ $reviews = $conn->query("
             <label>Rating</label>
 
             <select name="rating" required>
-
-                <option value="5">
-                    ⭐⭐⭐⭐⭐ (5 - Sangat Bagus)
-                </option>
-
-                <option value="4">
-                    ⭐⭐⭐⭐ (4 - Bagus)
-                </option>
-
-                <option value="3">
-                    ⭐⭐⭐ (3 - Lumayan)
-                </option>
-
-                <option value="2">
-                    ⭐⭐ (2 - Kurang Seru)
-                </option>
-
-                <option value="1">
-                    ⭐ (1 - Kecewa)
-                </option>
-
+                <option value="5">⭐⭐⭐⭐⭐ (5 - Sangat Bagus)</option>
+                <option value="4">⭐⭐⭐⭐ (4 - Bagus)</option>
+                <option value="3">⭐⭐⭐ (3 - Lumayan)</option>
+                <option value="2">⭐⭐ (2 - Kurang Seru)</option>
+                <option value="1">⭐ (1 - Kecewa)</option>
             </select>
 
         </div>
@@ -195,11 +175,7 @@ $reviews = $conn->query("
 
         </div>
 
-        <button
-            type="submit"
-            name="submit_review"
-            class="btn"
-        >
+        <button type="submit" name="submit_review" class="btn">
             Kirim Ulasan
         </button>
 
@@ -304,4 +280,7 @@ $reviews = $conn->query("
     <?php endif; ?>
 
 </div>
+
+</div>
+
 <?php include 'includes/footer.php'; ?>
