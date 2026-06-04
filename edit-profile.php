@@ -89,7 +89,7 @@ include 'includes/header.php';
                         name="bio"
                         rows="6"
                         placeholder="Ceritakan sedikit tentang dirimu..."
-                    ><?= htmlspecialchars($user['bio']); ?></textarea>
+                    ><?= htmlspecialchars($user['bio'] ?? ''); ?></textarea>
 
                 </div>
 
