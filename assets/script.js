@@ -87,34 +87,38 @@ document.addEventListener("DOMContentLoaded", () => {
     const cards =
         document.querySelectorAll(".games-slider .game-card");
 
-    let current = 0;
+    if(slider && cards.length > 0){
 
-    function activateCard(){
+        let current = 0;
 
-        cards.forEach(card => {
-            card.classList.remove("active");
-        });
+        function activateCard(){
 
-        cards[current].classList.add("active");
+            cards.forEach(card => {
+                card.classList.remove("active");
+            });
 
-slider.scrollTo({
-    left:
-        cards[current].offsetLeft -
-        (slider.clientWidth / 2) +
-        (cards[current].clientWidth / 2),
+            cards[current].classList.add("active");
 
-    behavior: "smooth"
-});
+            slider.scrollTo({
+                left:
+                    cards[current].offsetLeft -
+                    (slider.clientWidth / 2) +
+                    (cards[current].clientWidth / 2),
 
-        current++;
+                behavior: "smooth"
+            });
 
-        if(current >= cards.length){
-            current = 0;
+            current++;
+
+            if(current >= cards.length){
+                current = 0;
+            }
         }
+
+        activateCard();
+
+        setInterval(activateCard, 3000);
+
     }
-
-    activateCard();
-
-    setInterval(activateCard, 3000);
 
 });
