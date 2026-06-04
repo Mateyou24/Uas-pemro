@@ -14,7 +14,7 @@ $userAvatar = "default-avatar.png";
 
 if(isset($_SESSION['user_id'])){
 
-    include 'includes/db.php';
+    include_once 'includes/db.php';
 
     $uid = $_SESSION['user_id'];
 
