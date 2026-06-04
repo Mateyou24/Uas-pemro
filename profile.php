@@ -1,8 +1,13 @@
 <?php
 include 'includes/db.php';
-include 'includes/header.php';
 
-if(!isset($_SESSION['user_id'])){
+if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_samesite', 'None');
+    ini_set('session.cookie_secure', '0');
+    session_start();
+}
+
+if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
@@ -10,43 +15,24 @@ if(!isset($_SESSION['user_id'])){
 $user_id = $_SESSION['user_id'];
 $username = $_SESSION['username'];
 
-/*
-|----------------------------------
-| Ambil data user
-|----------------------------------
-*/
-$stmt = $conn->prepare("
-    SELECT *
-    FROM users
-    WHERE id = ?
-");
-
+$stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
-
 $user = $stmt->get_result()->fetch_assoc();
 
-/*
-|----------------------------------
-| Ambil review user
-|----------------------------------
-*/
 $reviewQuery = $conn->prepare("
     SELECT reviews.*, board_games.nama
     FROM reviews
-    JOIN board_games
-    ON reviews.board_game_id = board_games.id
+    JOIN board_games ON reviews.board_game_id = board_games.id
     WHERE reviews.nama_reviewer = ?
     ORDER BY reviews.created_at DESC
 ");
-
 $reviewQuery->bind_param("s", $username);
 $reviewQuery->execute();
-
 $reviews = $reviewQuery->get_result();
-
-/* Simpan jumlah review */
 $totalReviews = $reviews->num_rows;
+
+include 'includes/header.php';
 ?>
 
 <div class="profile-container">
@@ -113,9 +99,9 @@ $totalReviews = $reviews->num_rows;
 
         <h3>🎲 Review Saya</h3>
 
-        <?php if($reviews->num_rows > 0): ?>
+        <?php if ($totalReviews > 0): ?>
 
-            <?php while($review = $reviews->fetch_assoc()): ?>
+            <?php while ($review = $reviews->fetch_assoc()): ?>
 
                 <div class="profile-review-item">
 

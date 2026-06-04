@@ -3,12 +3,12 @@
 header('X-Frame-Options: ALLOWALL');
 header('Content-Security-Policy: frame-ancestors *');
 
-// Session cookie settings for cross-site iframe compatibility
-ini_set('session.cookie_samesite', 'None');
-ini_set('session.cookie_secure', '0');
-
-// Memulai session untuk sistem login nanti
-session_start();
+// Memulai session dengan pengaturan cookie untuk cross-site iframe
+if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_samesite', 'None');
+    ini_set('session.cookie_secure', '0');
+    session_start();
+}
 
 $userAvatar = "default-avatar.png";
 

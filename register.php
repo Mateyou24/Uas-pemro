@@ -1,6 +1,11 @@
 <?php
 include 'includes/db.php';
-include 'includes/header.php';
+
+if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_samesite', 'None');
+    ini_set('session.cookie_secure', '0');
+    session_start();
+}
 
 // Jika user sudah login, lempar ke dashboard
 if (isset($_SESSION['user_id'])) {
@@ -15,13 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = trim($_POST['username']);
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
-    $role = 'member'; // Setiap orang yang daftar otomatis jadi member biasa
+    $role = 'member';
 
-    // Validasi 1: Cek apakah password dan konfirmasi password cocok
     if ($password !== $confirm_password) {
         $error = "Konfirmasi password tidak cocok!";
     } else {
-        // Validasi 2: Cek apakah username sudah dipakai orang lain
         $stmt_check = $conn->prepare("SELECT id FROM users WHERE username = ?");
         $stmt_check->bind_param("s", $username);
         $stmt_check->execute();
@@ -30,10 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($result_check->num_rows > 0) {
             $error = "Username sudah terdaftar! Silakan cari nama lain.";
         } else {
-            // Jika aman, hash/enkripsi password baru
             $password_hashed = password_hash($password, PASSWORD_DEFAULT);
 
-            // Masukkan user baru ke database
             $stmt_insert = $conn->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, ?)");
             $stmt_insert->bind_param("sss", $username, $password_hashed, $role);
 
@@ -45,6 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 }
+
+include 'includes/header.php';
 ?>
 
 <div class="login-page">
@@ -58,7 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <h2>Welcome</h2>
                 <p>Create your account to get started.</p>
             </div>
-
 
             <?php if ($error != ''): ?>
                 <div class="alert-error">
@@ -108,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
 
                 <button type="submit" class="btn-login">
-                    Create Account
+                    Daftar
                 </button>
 
                 <div class="register-link">
@@ -122,26 +124,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     </div>
 
-    <!-- GAMBAR / BANNER (KANAN) -->
+    <!-- KANAN (dekorasi) -->
     <div class="login-left">
 
         <div class="overlay-content">
 
             <div class="brand">
-                <h1>
-                    Tavern Of<br>
-                    Meeple
-                </h1>
+                <h1>Tavern</h1>
+                <p>Of Meeple</p>
             </div>
 
             <div class="welcome-text">
                 <h2>
-                    Bangun koleksi Anda dan terhubung dengan sesama ahli strategi.
+                    Mulai petualangan board game-mu hari ini.
                 </h2>
-
                 <p>
-                    Buat akun untuk melacak permainan papan favorit Anda, menemukan strategi baru, 
-                    dan menjadi bagian dari pecinta Board Game yang berkembang.
+                    Daftarkan dirimu dan bergabunglah dengan komunitas pemain board game terbaik.
                 </p>
             </div>
 
@@ -150,4 +148,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
 </div>
+
 <?php include 'includes/footer.php'; ?>

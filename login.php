@@ -1,8 +1,13 @@
 <?php
 include 'includes/db.php';
-include 'includes/header.php';
 
-// Jika user sudah login, langsung lempar ke halaman utama (dashboard.php)
+if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_samesite', 'None');
+    ini_set('session.cookie_secure', '0');
+    session_start();
+}
+
+// Jika user sudah login, langsung lempar ke halaman utama
 if (isset($_SESSION['user_id'])) {
     if ($_SESSION['role'] === 'admin') {
         header("Location: admin/index.php");
@@ -18,7 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = trim($_POST['username']);
     $password = $_POST['password'];
 
-    // Ambil data user berdasarkan username
     $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
@@ -27,30 +31,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
 
-        // Verifikasi password biner/hash
         if (password_verify($password, $user['password'])) {
-
-            // Simpan data login ke session
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
 
-            // PROSES TRANSISI HALAMAN (REDIRECT) YANG BENAR
             if ($_SESSION['role'] === 'admin') {
                 header("Location: admin/index.php");
             } else {
                 header("Location: dashboard.php");
             }
             exit;
-
         } else {
             $error = "Password salah!";
         }
-
     } else {
         $error = "Username tidak ditemukan!";
     }
 }
+
+include 'includes/header.php';
 ?>
 
 <div class="login-page">

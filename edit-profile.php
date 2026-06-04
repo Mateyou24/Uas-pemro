@@ -1,66 +1,47 @@
 <?php
 include 'includes/db.php';
-include 'includes/header.php';
 
-if(!isset($_SESSION['user_id'])){
+if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_samesite', 'None');
+    ini_set('session.cookie_secure', '0');
+    session_start();
+}
+
+if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
 
 $user_id = $_SESSION['user_id'];
 
-$stmt = $conn->prepare("
-    SELECT *
-    FROM users
-    WHERE id = ?
-");
-
-$stmt->bind_param("i",$user_id);
+$stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+$stmt->bind_param("i", $user_id);
 $stmt->execute();
-
 $user = $stmt->get_result()->fetch_assoc();
 
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $bio = $_POST['bio'];
-
     $avatar = $user['avatar'];
 
-    if(
+    if (
         isset($_FILES['avatar']) &&
         $_FILES['avatar']['error'] == 0
-    ){
-
+    ) {
         $folder = "assets/avatars/";
-
-        $avatar =
-            time() . "_" .
-            basename($_FILES['avatar']['name']);
-
-        move_uploaded_file(
-            $_FILES['avatar']['tmp_name'],
-            $folder . $avatar
-        );
+        $avatar = time() . "_" . basename($_FILES['avatar']['name']);
+        move_uploaded_file($_FILES['avatar']['tmp_name'], $folder . $avatar);
     }
 
-    $update = $conn->prepare("
-        UPDATE users
-        SET bio = ?, avatar = ?
-        WHERE id = ?
-    ");
-
-    $update->bind_param(
-        "ssi",
-        $bio,
-        $avatar,
-        $user_id
-    );
-
+    $update = $conn->prepare("UPDATE users SET bio = ?, avatar = ? WHERE id = ?");
+    $update->bind_param("ssi", $bio, $avatar, $user_id);
     $update->execute();
 
     header("Location: profile.php");
     exit;
 }
+
+include 'includes/header.php';
 ?>
 
 <div class="edit-profile-container">
@@ -99,7 +80,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
             <!-- KANAN -->
             <div class="edit-right">
-
 
                 <div class="form-group">
 
