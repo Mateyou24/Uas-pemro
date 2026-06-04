@@ -399,6 +399,52 @@ body{
 }
 
 /* =========================
+   CARD RATING SUMMARY
+========================= */
+
+.card-rating{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-bottom:14px;
+    flex-wrap:wrap;
+}
+
+.card-stars{
+    display:flex;
+    gap:1px;
+}
+
+.star{
+    font-size:16px;
+    line-height:1;
+}
+
+.star.full{
+    color:#fbbf24;
+}
+
+.star.half{
+    color:#fbbf24;
+    opacity:.5;
+}
+
+.star.empty{
+    color:#334155;
+}
+
+.card-rating-score{
+    font-size:15px;
+    font-weight:700;
+    color:#f8fafc;
+}
+
+.card-rating-count{
+    font-size:13px;
+    color:#64748b;
+}
+
+/* =========================
    TITLE AND SEARCH
 ========================= */
 
