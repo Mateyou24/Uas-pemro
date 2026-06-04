@@ -1,13 +1,29 @@
 <?php
 include 'includes/db.php';
-include 'includes/header.php';
+
+if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_samesite', 'None');
+    ini_set('session.cookie_secure', '0');
+    session_start();
+}
 
 $result = $conn->query("
-SELECT *
-FROM board_games
-ORDER BY id DESC
-LIMIT 10
+    SELECT * FROM board_games
+    ORDER BY id DESC
+    LIMIT 10
 ");
+
+$reviews = $conn->query("
+    SELECT r.*, b.nama AS nama_game, b.id AS game_id,
+           u.avatar, u.role
+    FROM reviews r
+    JOIN board_games b ON r.board_game_id = b.id
+    LEFT JOIN users u ON r.nama_reviewer = u.username
+    ORDER BY r.created_at DESC
+    LIMIT 8
+");
+
+include 'includes/header.php';
 ?>
 
 <!-- HERO -->
@@ -82,10 +98,7 @@ LIMIT 10
                     <?= htmlspecialchars($row['nama']); ?>
                 </h3>
 
-                <a
-                    href="detail.php?id=<?= $row['id']; ?>"
-                    class="btn-detail"
-                >
+                <a href="detail.php?id=<?= $row['id']; ?>" class="btn-detail">
                     Lihat Detail
                 </a>
 
@@ -105,8 +118,98 @@ LIMIT 10
     <h2>Jelajahi Berbagai Genre</h2>
 
     <div class="category-list">
-
         <a href="game.php">BoardGame</a>
+    </div>
+
+</section>
+
+<!-- RIWAYAT ULASAN -->
+<section class="review-section dashboard-reviews">
+
+    <div class="section-header" style="margin-bottom:25px;">
+        <h3 style="margin-bottom:0;">Riwayat Ulasan Terbaru</h3>
+    </div>
+
+    <div class="reviews-list">
+
+    <?php if ($reviews->num_rows > 0): ?>
+
+        <?php while($rev = $reviews->fetch_assoc()): ?>
+
+        <div class="review-card">
+
+            <div class="review-header">
+
+                <div class="reviewer-info">
+
+                    <?php
+                        $avatar   = $rev['avatar'] ?? '';
+                        $hasAvatar = !empty($avatar) && $avatar !== 'default-avatar.png';
+                        $initials  = strtoupper(substr($rev['nama_reviewer'], 0, 1));
+                    ?>
+
+                    <?php if ($hasAvatar): ?>
+                        <img
+                            src="assets/avatars/<?= htmlspecialchars($avatar) ?>"
+                            alt="Avatar <?= htmlspecialchars($rev['nama_reviewer']) ?>"
+                            class="reviewer-avatar"
+                            onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+                        >
+                        <div class="reviewer-avatar-fallback" style="display:none;">
+                            <?= $initials ?>
+                        </div>
+                    <?php else: ?>
+                        <img
+                            src="assets/avatars/default-avatar.png"
+                            alt="Avatar <?= htmlspecialchars($rev['nama_reviewer']) ?>"
+                            class="reviewer-avatar"
+                            onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+                        >
+                        <div class="reviewer-avatar-fallback" style="display:none;">
+                            <?= $initials ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="reviewer-meta">
+                        <span class="review-name">
+                            <?= htmlspecialchars($rev['nama_reviewer']) ?>
+                        </span>
+                        <span class="review-role">
+                            <?= htmlspecialchars($rev['role'] ?? 'member') ?>
+                        </span>
+                    </div>
+
+                </div>
+
+                <span class="review-rating">
+                    <?= str_repeat("⭐", $rev['rating']) ?>
+                </span>
+
+            </div>
+
+            <a href="detail.php?id=<?= $rev['game_id'] ?>" class="review-game-link">
+                📋 <?= htmlspecialchars($rev['nama_game']) ?>
+            </a>
+
+            <p class="review-comment">
+                <?= nl2br(htmlspecialchars($rev['komentar'])) ?>
+            </p>
+
+            <small class="review-date">
+                <?= htmlspecialchars($rev['created_at']) ?>
+            </small>
+
+        </div>
+
+        <?php endwhile; ?>
+
+    <?php else: ?>
+
+        <p style="color:var(--text-soft); text-align:center; padding:30px 0;">
+            Belum ada ulasan. Jadilah yang pertama mengulas!
+        </p>
+
+    <?php endif; ?>
 
     </div>
 

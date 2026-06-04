@@ -2061,3 +2061,28 @@ html{
     font-weight: 500;
     border: 2px solid rgba(255,255,255,0.12);
 }
+
+/* =========================
+   DASHBOARD REVIEWS
+========================= */
+
+.dashboard-reviews {
+    margin: 40px auto;
+    max-width: 1200px;
+    padding: 35px;
+}
+
+.review-game-link {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: none;
+    margin-bottom: 10px;
+    transition: color .2s;
+}
+
+.review-game-link:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
