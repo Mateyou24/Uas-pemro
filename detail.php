@@ -64,6 +64,23 @@ $reviews = $conn->query("
     ORDER BY r.id DESC
 ");
 
+// 4. SUMMARY RATING
+$stmt_sum = $conn->prepare("
+    SELECT COALESCE(AVG(rating), 0) AS avg_rating,
+           COUNT(id) AS review_count,
+           SUM(rating = 5) AS bintang5,
+           SUM(rating = 4) AS bintang4,
+           SUM(rating = 3) AS bintang3,
+           SUM(rating = 2) AS bintang2,
+           SUM(rating = 1) AS bintang1
+    FROM reviews WHERE board_game_id = ?
+");
+$stmt_sum->bind_param("i", $id);
+$stmt_sum->execute();
+$summary = $stmt_sum->get_result()->fetch_assoc();
+$avg_rating   = round((float)$summary['avg_rating'], 1);
+$review_count = (int)$summary['review_count'];
+
 include 'includes/header.php';
 ?>
 
@@ -134,6 +151,44 @@ include 'includes/header.php';
     <h3 class="review-title">
         Ulasan Pengguna (<?= $reviews->num_rows ?>)
     </h3>
+
+    <!-- RATING SUMMARY -->
+    <?php if($review_count > 0):
+        $full  = floor($avg_rating);
+        $half  = ($avg_rating - $full) >= 0.5 ? 1 : 0;
+        $empty = 5 - $full - $half;
+    ?>
+    <div class="rating-summary">
+
+        <div class="rating-summary-left">
+            <div class="rating-big-score"><?= number_format($avg_rating, 1) ?></div>
+            <div class="rating-big-stars">
+                <?php for($i=0;$i<$full;$i++): ?><span class="star full">★</span><?php endfor; ?>
+                <?php if($half): ?><span class="star half">★</span><?php endif; ?>
+                <?php for($i=0;$i<$empty;$i++): ?><span class="star empty">★</span><?php endfor; ?>
+            </div>
+            <div class="rating-big-count"><?= $review_count ?> ulasan</div>
+        </div>
+
+        <div class="rating-summary-bars">
+            <?php
+            $bars = [5=>'bintang5',4=>'bintang4',3=>'bintang3',2=>'bintang2',1=>'bintang1'];
+            foreach($bars as $num => $key):
+                $val  = (int)($summary[$key] ?? 0);
+                $pct  = $review_count > 0 ? round($val / $review_count * 100) : 0;
+            ?>
+            <div class="rating-bar-row">
+                <span class="rating-bar-label"><?= $num ?> ★</span>
+                <div class="rating-bar-track">
+                    <div class="rating-bar-fill" style="width:<?= $pct ?>%"></div>
+                </div>
+                <span class="rating-bar-count"><?= $val ?></span>
+            </div>
+            <?php endforeach; ?>
+        </div>
+
+    </div>
+    <?php endif; ?>
 
     <?php if(isset($_SESSION['user_id'])): ?>
 
