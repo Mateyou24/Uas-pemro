@@ -1,12 +1,16 @@
 <?php
 include 'includes/db.php';
-include 'includes/header.php';
+
+if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_samesite', 'None');
+    ini_set('session.cookie_secure', '0');
+    session_start();
+}
 
 $result = $conn->query("
-SELECT *
-FROM board_games
-ORDER BY id DESC
-LIMIT 10
+    SELECT * FROM board_games
+    ORDER BY id DESC
+    LIMIT 10
 ");
 
 $reviews = $conn->query("
@@ -18,6 +22,8 @@ $reviews = $conn->query("
     ORDER BY r.created_at DESC
     LIMIT 8
 ");
+
+include 'includes/header.php';
 ?>
 
 <!-- HERO -->
@@ -92,10 +98,7 @@ $reviews = $conn->query("
                     <?= htmlspecialchars($row['nama']); ?>
                 </h3>
 
-                <a
-                    href="detail.php?id=<?= $row['id']; ?>"
-                    class="btn-detail"
-                >
+                <a href="detail.php?id=<?= $row['id']; ?>" class="btn-detail">
                     Lihat Detail
                 </a>
 
@@ -115,14 +118,12 @@ $reviews = $conn->query("
     <h2>Jelajahi Berbagai Genre</h2>
 
     <div class="category-list">
-
         <a href="game.php">BoardGame</a>
-
     </div>
 
 </section>
 
-<!-- RIWAYAT ULASAN TERBARU -->
+<!-- RIWAYAT ULASAN -->
 <section class="review-section dashboard-reviews">
 
     <div class="section-header" style="margin-bottom:25px;">
@@ -142,7 +143,7 @@ $reviews = $conn->query("
                 <div class="reviewer-info">
 
                     <?php
-                        $avatar    = $rev['avatar'] ?? '';
+                        $avatar   = $rev['avatar'] ?? '';
                         $hasAvatar = !empty($avatar) && $avatar !== 'default-avatar.png';
                         $initials  = strtoupper(substr($rev['nama_reviewer'], 0, 1));
                     ?>
