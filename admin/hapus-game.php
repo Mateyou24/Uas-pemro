@@ -16,7 +16,7 @@ if (isset($_GET['id'])) {
     $stmt_img = $conn->prepare("SELECT gambar FROM board_games WHERE id = ?");
     $stmt_img->bind_param("i", $id);
     $stmt_img->execute();
-    $res_img = $stmt_img->get_result()->fetch_assoc();
+    $res_img = db_get_result($stmt_img)->fetch_assoc();
     
     if ($res_img && $res_img['gambar'] != 'default.jpg') {
         $path_gambar = "../assets/images/" . $res_img['gambar'];

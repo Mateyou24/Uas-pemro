@@ -18,7 +18,7 @@ if ($search != '') {
     $search_param = "%" . $search . "%";
     $stmt->bind_param("s", $search_param);
     $stmt->execute();
-    $result = $stmt->get_result();
+    $result = db_get_result($stmt);
 } else {
     $result = $conn->query("
         SELECT bg.*,

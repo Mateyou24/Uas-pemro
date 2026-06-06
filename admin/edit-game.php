@@ -12,7 +12,7 @@ if (isset($_GET['id'])) {
     $stmt = $conn->prepare("SELECT * FROM board_games WHERE id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
-    $result = $stmt->get_result();
+    $result = db_get_result($stmt);
     
     if ($result->num_rows > 0) {
         $game = $result->fetch_assoc();

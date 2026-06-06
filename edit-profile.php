@@ -15,7 +15,7 @@ $user_id = $_SESSION['user_id'];
 $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
-$user = $stmt->get_result()->fetch_assoc();
+$user = db_get_result($stmt)->fetch_assoc();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 

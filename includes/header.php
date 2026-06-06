@@ -25,7 +25,7 @@ if(isset($_SESSION['user_id'])){
     $stmt->bind_param("i",$uid);
     $stmt->execute();
 
-    $result = $stmt->get_result();
+    $result = db_get_result($stmt);
 
     if($result->num_rows > 0){
 

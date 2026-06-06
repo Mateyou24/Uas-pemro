@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt_check = $conn->prepare("SELECT id FROM users WHERE username = ?");
         $stmt_check->bind_param("s", $username);
         $stmt_check->execute();
-        $result_check = $stmt_check->get_result();
+        $result_check = db_get_result($stmt_check);
 
         if ($result_check->num_rows > 0) {
             $error = "Username sudah terdaftar! Silakan cari nama lain.";

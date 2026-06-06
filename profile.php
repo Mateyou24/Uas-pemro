@@ -16,7 +16,7 @@ $username = $_SESSION['username'];
 $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
-$user = $stmt->get_result()->fetch_assoc();
+$user = db_get_result($stmt)->fetch_assoc();
 
 $reviewQuery = $conn->prepare("
     SELECT reviews.*, board_games.nama
@@ -27,7 +27,7 @@ $reviewQuery = $conn->prepare("
 ");
 $reviewQuery->bind_param("s", $username);
 $reviewQuery->execute();
-$reviews = $reviewQuery->get_result();
+$reviews = db_get_result($reviewQuery);
 $totalReviews = $reviews->num_rows;
 
 include 'includes/header.php';

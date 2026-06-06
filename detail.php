@@ -12,7 +12,7 @@ if (isset($_GET['id'])) {
     $stmt = $conn->prepare("SELECT * FROM board_games WHERE id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
-    $result = $stmt->get_result();
+    $result = db_get_result($stmt);
 
     if ($result->num_rows > 0) {
         $game = $result->fetch_assoc();
@@ -75,7 +75,7 @@ $stmt_sum = $conn->prepare("
 ");
 $stmt_sum->bind_param("i", $id);
 $stmt_sum->execute();
-$summary = $stmt_sum->get_result()->fetch_assoc();
+$summary = db_get_result($stmt_sum)->fetch_assoc();
 $avg_rating   = round((float)$summary['avg_rating'], 1);
 $review_count = (int)$summary['review_count'];
 
