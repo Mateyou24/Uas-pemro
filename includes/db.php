@@ -1,8 +1,8 @@
 <?php
 $host = "127.0.0.1";
-$user = "root";
-$pass = "";
-$db_name = "boardgame_hub";
+$user = "tavernofmeeple_user";
+$pass = "+3k}8eaJwl)do0si";
+$db_name = "tavernofmeeple_db";
 
 $conn = new mysqli($host, $user, $pass, $db_name, 3306);
 
