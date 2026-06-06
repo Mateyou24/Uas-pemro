@@ -25,12 +25,12 @@ if(isset($_SESSION['user_id'])){
     $stmt->bind_param("i",$uid);
     $stmt->execute();
 
-    $result = db_get_result($stmt);
+    $_hdr_result = db_get_result($stmt);
 
-    if($result->num_rows > 0){
+    if($_hdr_result->num_rows > 0){
 
         $userData =
-        $result->fetch_assoc();
+        $_hdr_result->fetch_assoc();
 
         if(!empty($userData['avatar'])){
 
@@ -38,6 +38,7 @@ if(isset($_SESSION['user_id'])){
             $userData['avatar'];
         }
     }
+    unset($_hdr_result);
 }
 
 
