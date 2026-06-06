@@ -5,8 +5,6 @@ header('Content-Security-Policy: frame-ancestors *');
 
 // Memulai session dengan pengaturan cookie untuk cross-site iframe
 if (session_status() === PHP_SESSION_NONE) {
-    ini_set('session.cookie_samesite', 'None');
-    ini_set('session.cookie_secure', '0');
     session_start();
 }
 
